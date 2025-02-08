@@ -29,6 +29,7 @@ export default class MaintenanceProvider {
   #config() {
     return this.app.config.get('maintenance', {
       default: 'file',
+      cookieName: 'adonis-maintenance',
       drivers: {
         file: new FileMaintenanceDriver(),
       },

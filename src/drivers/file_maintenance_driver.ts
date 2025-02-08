@@ -3,6 +3,7 @@ import { MaintenanceDriver } from './maintenance_driver.js'
 import { rm, writeFile, stat, readFile, mkdir } from 'node:fs/promises'
 import { DownPayload } from '../types.js'
 import { sep } from 'node:path'
+
 export class FileMaintenanceDriver implements MaintenanceDriver {
   public async activate(data: DownPayload): Promise<void> {
     const path = this.#path()

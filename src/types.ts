@@ -29,3 +29,9 @@ declare module '@adonisjs/core/types' {
     maintenance: MaintenanceService
   }
 }
+
+declare module '@adonisjs/core/app' {
+  interface Application<ContainerBindings> {
+    maintenance(): MaintenanceDriver
+  }
+}
