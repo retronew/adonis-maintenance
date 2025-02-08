@@ -2,15 +2,19 @@ import app from '@adonisjs/core/services/app'
 import { MaintenanceDriver } from './maintenance_driver.js'
 import { rm, writeFile, stat, readFile, mkdir } from 'node:fs/promises'
 import { DownPayload } from '../types.js'
-import { sep } from 'node:path'
+import { dirname } from 'node:path'
 
 export class FileMaintenanceDriver implements MaintenanceDriver {
+  #path(): string {
+    return app.tmpPath('down.lock')
+  }
+
   public async activate(data: DownPayload): Promise<void> {
     const path = this.#path()
-    const dir = path.split(sep).slice(0, -1).join(sep)
-    await stat(dir).catch(async () => {
-      await mkdir(dir, { recursive: true })
-    })
+
+    // create the directory if it doesn't exist
+    await mkdir(dirname(path), { recursive: true })
+
     await writeFile(path, JSON.stringify(data))
   }
 
@@ -19,16 +23,16 @@ export class FileMaintenanceDriver implements MaintenanceDriver {
   }
 
   public async active(): Promise<boolean> {
-    return stat(this.#path())
-      .then(() => true)
-      .catch(() => false)
+    try {
+      await stat(this.#path())
+      return true
+    } catch {
+      return false
+    }
   }
 
   public async data(): Promise<DownPayload> {
-    return readFile(this.#path()).then((r) => JSON.parse(r.toString()))
-  }
-
-  #path(): string {
-    return app.tmpPath('down.lock')
+    const content = await readFile(this.#path())
+    return JSON.parse(content.toString())
   }
 }
