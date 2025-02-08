@@ -2,11 +2,11 @@ import app from '@adonisjs/core/services/app'
 import { MaintenanceDriver } from './maintenance_driver.js'
 import { rm, writeFile, stat, readFile, mkdir } from 'node:fs/promises'
 import { DownPayload } from '../types.js'
-
+import { sep } from 'node:path'
 export class FileMaintenanceDriver implements MaintenanceDriver {
   public async activate(data: DownPayload): Promise<void> {
     const path = this.#path()
-    const dir = path.split('/').slice(0, -1).join('/')
+    const dir = path.split(sep).slice(0, -1).join(sep)
     await stat(dir).catch(async () => {
       await mkdir(dir, { recursive: true })
     })
