@@ -1,0 +1,13 @@
+{{{
+  exports({ to: app.configPath('maintenance.ts') })
+}}}
+import { defineConfig, drivers } from '@retronew/adonis-maintenance'
+
+export default defineConfig({
+  default: 'file',
+  cookieName: 'adonis_maintenance',
+
+  drivers: {
+    file: drivers.file(),
+  },
+})
