@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import { inject } from '@adonisjs/core'
 import { BaseCommand, flags } from '@adonisjs/core/ace'
-import { DownPayload } from '../src/types.js'
+import { type DownPayload } from '../src/types.js'
 
 export default class DownCommand extends BaseCommand {
   static commandName = 'maintenance:down'

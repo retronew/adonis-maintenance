@@ -1,5 +1,5 @@
 import { RuntimeException } from '@adonisjs/core/exceptions'
-import { ManagerModeFactory as ManagerDriverFactory } from './types.js'
+import { type ManagerModeFactory as ManagerDriverFactory } from './types.js'
 
 export class MaintenanceManager<KnownDrivers extends Record<string, ManagerDriverFactory>> {
   constructor(public config: { default?: keyof KnownDrivers; drivers: KnownDrivers }) {}

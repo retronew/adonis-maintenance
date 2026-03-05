@@ -1,8 +1,8 @@
-import { HttpContext, Request, Response } from '@adonisjs/core/http'
+import { type HttpContext, type HttpRequest, type HttpResponse } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
 import hash from '@adonisjs/core/services/hash'
-import { NextFn } from '@adonisjs/core/types/http'
-import { DownPayload } from '../types.js'
+import { type NextFn } from '@adonisjs/core/types/http'
+import { type DownPayload } from '../types.js'
 
 export default class MaintenanceMiddleware {
   protected cookie = app.config.get<string>('maintenance.cookieName', 'adonis_maintenance')
@@ -43,20 +43,20 @@ export default class MaintenanceMiddleware {
       .send(data.message ?? 'Service Unavailable')
   }
 
-  protected async bypassResponse(response: Response, secret: string) {
+  protected async bypassResponse(response: HttpResponse, secret: string) {
     return response
       .cookie(this.cookie, await hash.make(secret))
       .redirect()
       .toPath('/')
   }
 
-  protected async hasValidBypassCookie(request: Request, secret: string) {
+  protected async hasValidBypassCookie(request: HttpRequest, secret: string) {
     const cookie = request.cookie(this.cookie)
     if (!cookie) return false
     return hash.verify(cookie, secret)
   }
 
-  protected withHeaders(response: Response, data: DownPayload) {
+  protected withHeaders(response: HttpResponse, data: DownPayload) {
     if (data.retry) {
       response.header('Retry-After', data.retry)
     }
